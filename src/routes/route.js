@@ -11,9 +11,9 @@ router.get('/test-me', function (req, res) {
 
     problem1.welcome ()
 
-    problem2.abc ()
-    problem2.def ()
-    problem2.ghi ()
+    problem2.printDate ()
+    problem2.printMonth ()
+    problem2.getBatchInfo ()
 
     problem3.trim ()
     problem3.toLowerCase ()

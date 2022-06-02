@@ -17,6 +17,6 @@ let getBatchInfo = function roots () {
 }
 console.log("Batch name and week and day is = " + getBatchInfo ())
 
-module.exports.abc = printDate
-module.exports.def = printMonth
-module.exports.ghi = getBatchInfo
+module.exports.printDate = printDate
+module.exports.printMonth = printMonth
+module.exports.getBatchInfo = getBatchInfo
