@@ -39,7 +39,7 @@ let players =
         return res.send({ msg: "Error: This player exists, check it below !!", data: players })
     }
         players.push(newPlayers)
-       res.send(  { data: players , status: true }  )
+      return res.send(  { data: players , status: true }  )
    })
 
 
