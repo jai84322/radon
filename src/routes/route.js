@@ -35,8 +35,8 @@ router.get('/hello', function (req, res) {
     let oddNoArray = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
     console.log(getLoad.tail(oddNoArray))
 
-    let unionFx = function (...a) {
-        return getLoad.union(...a);
+    let unionFx = function (...a) { 
+        return getLassoad.union(...a);
     }
     let array1 = [1, 2, 3, 4];
     let array2 = [5, 6, 3, 1];
