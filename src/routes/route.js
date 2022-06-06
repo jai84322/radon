@@ -8,7 +8,7 @@ router.get('/movies', function (req, res) {
 
     let movies = ["The Shining", "Batman", "The Persuit of Happiness", "Avatar"]
     
-res.send(movies)
+    return res.send(movies)
 
 });
 
@@ -25,7 +25,7 @@ router.get('/movies/:indexNumber', function (req, res) {
     } else {
         finalMovies = ("please enter number below " + movies.length)
     }
-res.send(finalMovies)
+    return res.send(finalMovies)
 
 });
 
@@ -47,7 +47,7 @@ router.get('/films', function (req, res) {
         name: "Finding Nemo",
        }]
 
-res.send(arr)
+    return res.send(arr)
 
 });
 
@@ -74,8 +74,10 @@ router.get('/films/:filmId', function (req, res) {
        function idLookup (x) {
         return x.id ;
     }
+
     let getId = arr.map (idLookup)
-    
+    console.log(getId);
+
        let finalFilm = " " 
     
        if ( filmIndex <= getId.length ) {
@@ -84,7 +86,7 @@ router.get('/films/:filmId', function (req, res) {
            finalFilm = ( "Please enter number equal to or below := " + getId.length + ", Because no movie exists with the entered id")
        }
 
-res.send(finalFilm)
+    return res.send(finalFilm)
 
 });
 
