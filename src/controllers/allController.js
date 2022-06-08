@@ -50,7 +50,32 @@ const authorsName = async function (req, res) {
     return res.send({msg: authorName})
 }
 
+// additional problems 
 
+const getBooksById = async function (req,res) {
+    let authorId = req.params.id
+    let savedData = await bookModel.find({author_id : authorId}).select({name:1, _id:0})
+    return res.send({data : savedData})
+
+}
+
+const getAuthor = async function (req,res) {
+    let bookQuery = await bookModel.find({ratings:{$gt:"4"}}).select({author_id:1, _id:0})
+    let authId = bookQuery.map(inp => inp.author_id)
+    
+    let temp = []
+    for(i=0;i<authId.length;i++) {
+        let x = authId[i]
+    let authorQuery = await authorModel.find({ $and: [{author_id : x}, {age: {$gt:"50"}}] }).select({author_name:1, age:1, _id:0})
+    temp.push(authorQuery)
+    }
+    const finalAns = temp.flat()
+    return res.send({data: finalAns})
+}
+
+
+module.exports.getAuthor = getAuthor
+module.exports.getBooksById = getBooksById
 module.exports.createBook= createBook
 module.exports.createAuthor= createAuthor
 module.exports.allBooks= allBooks
