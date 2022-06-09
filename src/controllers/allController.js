@@ -22,9 +22,7 @@ module.exports.createPublisher = createPublisher
 
 const createBook = async function (req, res) {
     let data = req.body
-    let{author, publisher} = req.body
-    console.log(author);
-    console.log(publisher);
+    let{author, publisher} = req.body 
 
     if(!author || !publisher) {
         return res.send({status: false, error: "Author ID/Publisher ID is required"})
@@ -57,16 +55,14 @@ module.exports.getBooks = getBooks
 
 
 const updateBooks = async function(req, res){
-    // let data= req.params.id
     
-    let publisherId= await publisherModel.find({$or: [{name : "penguin"},{ name: "harpercollins"}]}).select({_id:1})
-    console.log(publisherId);
+    let publisherId = await publisherModel.find({$or: [{name : "penguin"},{ name: "harpercollins"}]}).select({_id:1})
 
-    let updateBook= await bookModel.updateMany({publisher: publisherId},{$set: {isHardCover: true}}, {new: true})
+    let updateBook = await bookModel.updateMany({publisher: publisherId},{$set: {isHardCover: true}})
 
-    let authorId= await authorModel.find({rating: {$gt: 3.5}})
+    let authorId = await authorModel.find({rating: {$gt: 3.5}}).select({_id:1})
     
-    let updatePrice= await bookModel.updateMany({author: authorId},{$inc: {price: 10}}, {new:true})
+    let updatePrice = await bookModel.updateMany({author: authorId},{$inc: {price: 10}})
 
     return res.send({msg: updateBook, updatePrice})
 }
