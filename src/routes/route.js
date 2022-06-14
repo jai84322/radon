@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const allController= require("../controllers/allController")
-const checkToken = require ("../middlewares/auth")
+const middleware = require ("../middlewares/auth")
 
 
 
@@ -9,10 +9,10 @@ router.post("/createUser", allController.createUser  )
 
 router.post("/login", allController.loginUser)
 
-router.get("/user/:userId", checkToken.checkToken, allController.getUserData)
+router.get("/user/:userId", middleware.checkToken, allController.getUserData)
 
-router.put("/user/:userId", checkToken.checkToken, allController.updateUser)
+router.put("/user/:userId", middleware.checkToken, allController.updateUser)
 
-router.delete("/user/:userId", checkToken.checkToken, allController.deleteUser)
+router.delete("/user/:userId", middleware.checkToken, allController.deleteUser)
 
 module.exports = router;

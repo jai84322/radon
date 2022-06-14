@@ -22,7 +22,7 @@ const loginUser = async function (req, res) {
   let token = jwt.sign(
     {
       userId: user._id.toString(),
-      batch: "thorium",
+      batch: "radon",
       organisation: "FunctionUp",
     },
     "functionup-radon"
@@ -47,7 +47,7 @@ const updateUser = async function (req, res) {
   let userId = req.params.userId;
   let user = await userModel.findById(userId);
   if (!user) {
-    return res.send("No such user exists");
+    return res.send({status : false, error : "no such user exists"});
   }
 
   let userData = req.body;
