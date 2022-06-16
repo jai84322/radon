@@ -2,18 +2,24 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
 const createUser = async function (req, res) {
+  try {
   let data = req.body;
   let savedData = await userModel.create(data);
-  return res.send({ msg: savedData });
+  return res.status(200).send({ msg: savedData });
+} catch (err) {
+  console.log(err.message)
+  res.status(500).send({ error: err.message })
+}
 };
 
 const loginUser = async function (req, res) {
+  try {
   let userName = req.body.emailId;
   let password = req.body.password;
 
   let user = await userModel.findOne({ emailId: userName, password: password });
   if (!user)
-    return res.send({
+    return res.status(400).send({
       status: false,
       msg: "username or the password is not corerct",
     });
@@ -28,31 +34,47 @@ const loginUser = async function (req, res) {
     "functionup-radon"
   );
   res.setHeader("x-auth-token", token);
-  return res.send({ status: true, token: token });
+  return res.status(200).send({ status: true, token: token });
+} catch (err) {
+  console.log(err.message)
+  res.status(500).send({ error: err.message })
+}
 };
 
 
 const getUserData = async function (req, res) {
-
+  try {
   let userId = req.params.userId;
   let userDetails = await userModel.findById(userId);
- 
 
-  return res.send({ status: true, data: userDetails });
+  return res.status(200).send({ status: true, data: userDetails });
+} catch (err) {
+  console.log(err.message)
+  res.status(500).send({ error: err.message })
+}
 };
 
 const updateUser = async function (req, res) {
-
+  try {
   let userId = req.params.userId;
   let userData = req.body;
   let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData, {new:true});
-  return res.send({ status: true, data: updatedUser });
+  return res.status(200).send({ status: true, data: updatedUser });
+} catch (err) {
+  console.log(err.message)
+  res.status(500).send({ error: err.message })
+}
 };
 
 const deleteUser = async function (req,res) {
+  try {
   let userId = req.params.userId
   let updatedUser = await userModel.findOneAndUpdate({_id: userId}, {isDeleted: true}, {new: true})
-  return res.send({status: true, data: updatedUser})
+  return res.status(200).send({status: true, data: updatedUser})
+} catch (err) {
+  console.log(err.message)
+  res.status(500).send({ error: err.message })
+}
 }
 
 module.exports.createUser = createUser;
