@@ -1,85 +1,64 @@
-let axios = require("axios")
+const axios = require('axios')
 
-
-let getStates = async function (req, res) {
-
-    try {
-        let options = {
-            method: 'get',
-            url: 'https://cdn-api.co-vin.in/api/v2/admin/location/states'
-        }
-        let result = await axios(options);
-        console.log(result)
-        let data = result.data
-        res.status(200).send({ msg: data, status: true })
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
+let getVaccine = async function (req, res) {
+    let district = req.query.district
+    let date = req.query.date
+    let result = await axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${district}&date=${date}`) // template literal
+    let data= result.data
+    return res.status(200).send({msg : data})
 }
 
+module.exports.getVaccine = getVaccine   
 
-let getDistricts = async function (req, res) {
-    try {
-        let id = req.params.stateId
-        let options = {
-            method: "get",
-            url: `https://cdn-api.co-vin.in/api/v2/admin/location/districts/${id}`
-        }
-        let result = await axios(options);
-        console.log(result)
-        let data = result.data
-        res.status(200).send({ msg: data, status: true })
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
+let londonWeather = async function (req, res) {
+    let result = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=London&appid=27899f5be4cdd787eb306e01685056a0`) 
+    let data= result.data
+    return res.status(200).send({msg : data})
 }
 
-let getByPin = async function (req, res) {
-    try {
-        let pin = req.query.pincode
-        let date = req.query.date
-        console.log(`query params are: ${pin} ${date}`)
-        var options = {
-            method: "get",
-            url: `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pin}&date=${date}`
-        }
-        let result = await axios(options)
-        console.log(result.data)
-        res.status(200).send({ msg: result.data })
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
+module.exports.londonWeather = londonWeather 
+
+let londonTemp = async function (req, res) {
+    let result = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=London&appid=27899f5be4cdd787eb306e01685056a0`) 
+    let data= result.data.main.temp
+    return res.status(200).send({msg : data})
 }
 
-let getOtp = async function (req, res) {
-    try {
-        let blahhh = req.body
-        
-        console.log(`body is : ${blahhh} `)
-        var options = {
-            method: "post",
-            url: `https://cdn-api.co-vin.in/api/v2/auth/public/generateOTP`,
-            data: blahhh
-        }
+module.exports.londonTemp = londonTemp 
 
-        let result = await axios(options)
-        console.log(result.data)
-        res.status(200).send({ msg: result.data })
+let getSortedCities = async function (req, res) {
+    let cities = ["Bengaluru", "Mumbai", "Delhi", "Kolkata", "Chennai", "London", "Moscow"]
+    let cityObjArray = []
+
+    for (let i = 0; i<cities.length;i++ ) {
+        let obj = {city : cities[i]} // city : Bengaluru
+        let result = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${cities[i]}&appid=27899f5be4cdd787eb306e01685056a0`)
+        obj.temp = result.data.main.temp
+        cityObjArray.push(obj)
     }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
+    let sorted = cityObjArray.sort(function (a,b){return a.temp - b.temp })
+    return res.status(200).send({data : sorted})
 }
 
+module.exports.getSortedCities = getSortedCities 
 
-module.exports.getStates = getStates
-module.exports.getDistricts = getDistricts
-module.exports.getByPin = getByPin
-module.exports.getOtp = getOtp
+let allMemes = async function (req, res) {
+    let result = await axios.get(`https://api.imgflip.com/get_memes`) 
+    let data= result.data
+    return res.status(200).send({msg : data})
+}
+
+module.exports.allMemes = allMemes  
+
+let createMemes = async function (req, res) {
+    let template_id = req.query.template_id
+    let text0 = req.query.text0
+    let text1 = req.query.text1
+    let username = req.query.username
+    let password = req.query.password
+    let result = await axios.post(`https://api.imgflip.com/caption_image?template_id=${template_id}&text0=${text0}&text1=${text1}&username=${username}&password=${password}`) 
+    let data= result.data
+    return res.status(200).send({msg : data})
+}
+
+module.exports.createMemes = createMemes    
