@@ -8,7 +8,7 @@ const createUser = async function (req, res) {
   return res.status(201).send({ msg: savedData });
 } catch (err) {
   console.log(err.message)
-  res.status(500).send({ error: err.message })
+ return res.status(500).send({ error: err.message })
 }
 };
 
@@ -37,7 +37,7 @@ const loginUser = async function (req, res) {
   return res.status(200).send({ status: true, token: token });
 } catch (err) {
   console.log(err.message)
-  res.status(500).send({ error: err.message })
+  return res.status(500).send({ error: err.message })
 }
 };
 
@@ -50,7 +50,7 @@ const getUserData = async function (req, res) {
   return res.status(200).send({ status: true, data: userDetails });
 } catch (err) {
   console.log(err.message)
-  res.status(500).send({ error: err.message })
+  return res.status(500).send({ error: err.message })
 }
 };
 
@@ -62,7 +62,7 @@ const updateUser = async function (req, res) {
   return res.status(200).send({ status: true, data: updatedUser });
 } catch (err) {
   console.log(err.message)
-  res.status(500).send({ error: err.message })
+  return res.status(500).send({ error: err.message })
 }
 };
 
