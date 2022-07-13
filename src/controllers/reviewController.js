@@ -2,7 +2,6 @@ const reviewModel = require('../models/reviewModel');
 const bookModel = require('../models/bookModel')
 const { isValid, isValidObjectId, isValidRequest, removeSpace } = require('../validators/reviewValidation');
 
-
 const createReview = async function (req, res) {
 
     try {
@@ -20,19 +19,15 @@ const createReview = async function (req, res) {
             return res.status(400).send({ status: false, message: "please enter valid request" })
         }
 
-        if (!bookId) {
-            return res.status(400).send({ status: false, message: "bookId is missing" })
-        }
-
-        if (!isValidObjectId(bookId) || !isValidObjectId(id)) {
+        if (!isValidObjectId(id)) {
             return res.status(400).send({ status: false, message: "please enter valid objectId" })
         }
 
-        let checkBook = await bookModel.findOne({ isDeleted: false, _id: bookId })
+        let checkBook = await bookModel.findOne({ isDeleted: false, _id: id })
         if (!checkBook) {
             return res.status(404).send({ status: false, message: "no such book exists" })
         }
-        objReview.bookId = bookId
+        objReview.bookId = id
 
         if ( reviewedBy && !isValid(reviewedBy)) {
             return res.status(400).send({ status: false, message: "please give valid reviewedBy input" })
@@ -42,15 +37,6 @@ const createReview = async function (req, res) {
             reviewedBy = removeSpace(reviewedBy)
         }
         objReview.reviewedBy = reviewedBy
-
-        // if (!reviewedAt) {
-        //     return res.status(400).send({ status: false, message: "reviewedAt is missing" })
-        // }
-
-        // if (!isValid(reviewedAt)) {
-        //     return res.status(400).send({ status: false, message: "please give valid input in reviewedAt" })
-        // }
-        // objReview.reviewedAt = reviewedAt
 
         objReview.reviewedAt = Date.now()
 
@@ -69,14 +55,15 @@ const createReview = async function (req, res) {
         if (isDeleted == true) {
             return res.status(400).send({ status: false, message: "you are not allowed to delete the same review while creating it" })
         }
-
         
         let savedData = await reviewModel.create(objReview)
+        let finalData = null
         if (savedData != false) {
-            await bookModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: 1 } }, { new: true })
+        finalData = await bookModel.findOneAndUpdate({ _id : id }, { $inc: { reviews: 1 } }, { new: true })
+
         }
-        checkBook._doc["reviewsData"] = savedData 
-        return res.status(201).send({ status: true, message: "success", data: checkBook })
+        finalData._doc["reviewsData"] = savedData 
+        return res.status(201).send({ status: true, message: "success", data: finalData })
     } catch (error) {
         console.log(error);
         return res.status(500).send({ status: false, message: error.message })
